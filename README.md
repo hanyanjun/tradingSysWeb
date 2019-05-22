@@ -1,6 +1,6 @@
 # order_web
 
-> A Vue.js project
+> xorder 交易系统web端
 
 ## Build Setup
 
