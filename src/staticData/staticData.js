@@ -56,11 +56,11 @@ var d4 = [
         label : '运行中' , value : '0'
     },
     {
-        label : '已修改' , value : '1'
-    },
-    {
-        label : '已关闭' , value : '2'
-    },
+        label : '已结束' , value : '1'
+    }
+    // {
+    //     label : '已关闭' , value : '2'
+    // },
     // {
     //     label : '已完成' , value : '2'
     // },

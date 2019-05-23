@@ -49,11 +49,18 @@
           <span class="EveryAmount"
                 slot="EveryAmount"
                 slot-scope="text">{{text || '---'}}</span>
-          <span class="FinishReason"
-                slot="FinishReason"
+          <span class="Finished"
+                slot="Finished"
                 slot-scope="text">
             <!-- // 委托状态 0 运行中 1 暂停  2 停止 3 取消 -->
-              <template v-if="text == 0">
+            <template v-if="text">
+                <span class="red">已停止</span>
+            </template>
+            <template v-else>
+                <span class="green">运行中</span>
+            </template>
+              <!-- <template v-if="text">
+                <span class="red">已停止</span>
                 <span class="green">运行中</span>
               </template>
               <template v-if="text == 1">
@@ -61,7 +68,7 @@
               </template>
               <template v-if="text == 2">
                 <span class="red">已停止</span>
-              </template>
+              </template> -->
           </span>
           <span class="action"
                 slot="action"
@@ -349,7 +356,7 @@ export default {
       card1: {
         type: ["1", "2"],
         method: ["1", "2"],
-        status : ['0','1','2']
+        status : ['0','1']
       },
       isNumVaditor: isNumVaditor,
       form: this.$form.createForm(this, {
@@ -403,8 +410,18 @@ export default {
       return [];
     },
     taskArr() {
+      let arr = [];
+      if(this.card1.status.length > 0){   
+        this.card1.status.forEach((v)=>{
+          if(v == '0'){
+            arr.push('false');
+          }else{
+            arr.push('true');
+          }
+        })
+      }
         return this.table1.filter((v)=>{
-            return this.card1.type.indexOf(String(v.Side)) > -1 && this.card1.method.indexOf(v.dataType) > -1 && this.card1.status.indexOf(String(v.FinishReason)) > -1;
+            return this.card1.type.indexOf(String(v.Side)) > -1 && this.card1.method.indexOf(v.dataType) > -1 && arr.indexOf(String(v.Finished)) > -1;
         })
     }
   },

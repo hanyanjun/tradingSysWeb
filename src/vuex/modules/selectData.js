@@ -29,7 +29,7 @@ const selectData = {
             {title : '总委托数量', dataIndex : 'TotalAmount' , key : '8',width : 140,scopedSlots : {customRender : 'TotalAmount'}},
             {title : '时间间隔基数', dataIndex : 'MinTimeInterval' , key : '9',width : 140},
             {title : '单笔委托基数', dataIndex : 'EveryAmount' , key : '10',width : 120,scopedSlots : {customRender : 'EveryAmount'}},
-            {title : '状态', dataIndex : 'FinishReason' , key : '12',width : 100,scopedSlots : {customRender : 'FinishReason'}},
+            {title : '状态', dataIndex : 'Finished' , key : '12',width : 100,scopedSlots : {customRender : 'Finished'}},
             {title : '操作', dataIndex : 'action' , key : '13',scopedSlots : {customRender : 'action'}},
         ],
         hisTaskTable :[
