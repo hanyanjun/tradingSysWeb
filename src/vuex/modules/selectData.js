@@ -18,11 +18,12 @@ const selectData = {
         },
         trustTable : [
             {title : '序号', dataIndex : 'key' , key : '1', width : 60},
-            {title : '市场', dataIndex : 'Exchange' , key : '2',width : 100},
+            {title : '市场', dataIndex : 'Exchange' , key : '2',width : 80},
             {title : '货币对', dataIndex : 'Symbol' , key : '3' ,width : 100},
             {title : '策略类型', dataIndex : 'dataType' , key : '14',width : 100 , scopedSlots : {customRender : 'dataType'}},
             {title : '操作类型', dataIndex : 'Side' , key : '4',width : 100 , scopedSlots : {customRender : 'Side'}},
             {title : '价格上限', dataIndex : 'Price' , key : '5',width : 100},
+            {title : '已下单数量', dataIndex : 'OrderPlaced' , key : '14',width : 100 ,  scopedSlots : {customRender : 'OrderPlaced'}},
             {title : '档位范围', dataIndex : 'PriceRange' , key : '6',width : 140 ,scopedSlots : {customRender : 'PriceRange'}},
             {title : '委托比例', dataIndex : 'Rate' , key : '7',width : 100,scopedSlots : {customRender : 'Rate'}},
             {title : '总委托数量', dataIndex : 'TotalAmount' , key : '8',width : 140,scopedSlots : {customRender : 'TotalAmount'}},

@@ -43,6 +43,9 @@
           <span class="Rate"
                 slot="Rate"
                 slot-scope="text">{{text || '---'}}</span>
+          <span class="OrderPlaced"
+                slot="OrderPlaced"
+                slot-scope="text">{{text || '---'}}</span>
           <span class="EveryAmount"
                 slot="EveryAmount"
                 slot-scope="text">{{text || '---'}}</span>
