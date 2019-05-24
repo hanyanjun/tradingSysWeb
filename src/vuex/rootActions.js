@@ -47,7 +47,7 @@ export default {
             let now =  Number(String(Date.parse(new Date())).substr(0,10));
             let end  = now + 2*60*60;
             // 下面交易所需要先发送订阅的通知
-            if(market == 'bitfinex' || market == 'okex' || market == 'bitmesh' || market == 'kucoin'){
+            if(market == 'bitfinex' || market == 'okex' || market == 'bitmesh' || market == 'kucoin' || market == 'gateio'){
                 state.initInfo.client.send(`/exchange/MarketDepthSub/MarketDepthSub.${market}`,{},JSON.stringify({
                     Exchange : market , //	string `json:"exchange"`  //交易所
                     Symbol  : currency , //  string `json:"symbol"`     // 交易对, btcusdt, bccbtc......
