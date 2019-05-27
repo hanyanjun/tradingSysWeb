@@ -118,11 +118,15 @@
             textAlign: 'right',
             }">
         <a-button :style="{marginRight: '8px'}"
+                  @click="jianceapi" v-if="formType == 'edit'">
+          检测
+        </a-button>
+        <a-button :style="{marginRight: '8px'}"
                   @click="handleCancel">
-          Cancel
+          取消
         </a-button>
         <a-button @click="handleOk"
-                  type="primary">Submit</a-button>
+                  type="primary">确定</a-button>
       </div>
     </a-drawer>
 </div>
@@ -192,6 +196,14 @@ export default {
   methods: {
     handleCancel(){
       this.dialogShow = false;
+    },
+    jianceapi(){
+      let values = this.form.getFieldsValue();
+      console.log(this.curItem)
+      let obj = {...values, reserved1 : values.reserved1 || "" , sysaccount : window.sessionStorage['user_name']};
+      this.$api.testapikey(obj).then(obj1=>{
+        this.$message.info('api 有效');
+      })
     },
     formValueChange(item,values){
       let { exchange } = values;

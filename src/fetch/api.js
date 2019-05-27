@@ -96,6 +96,9 @@ export  default{
   addAcc({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,reserved1,account}){
     return gAJAX(`/api/addapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}${reserved1 ? '&reserved1='+reserved1 : ''}&account=${account}`)
   },
+  testapikey({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,reserved1}){
+    return gAJAX(`/api/testapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}&reserved1=${reserved1}`)
+  },
   // 修改客户号
   modifyAcc({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,reserved1,account}){
     return gAJAX(`/api/modifyapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}${reserved1 ? '&reserved1='+reserved1 : ''}&account=${account}`)
