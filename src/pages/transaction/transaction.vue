@@ -22,13 +22,30 @@
         <a-form-item label="交易对"
                      :label-col="{ span: 6 }"
                      :wrapper-col="{ span: 18 }">
-          <a-input placeholder="示例：ETH-BTC"
+            <a-dropdown :trigger="['click']">
+              <a-input placeholder="示例：ETH-BTC"
+              autocomplete="off"
                    v-decorator="['money', {rules: [{ required: true, message: '请输入交易对'  } , {pattern : new RegExp(/[A-Z]+-[A-Z]+/) , message : '请输入正确格式'}]}]"></a-input>
+               <div slot="overlay"   :style="filterSymbol.length > 0 ? 'max-height:200px;overflow-y:scroll;background:white' : 'overflow:hidden;background:white'">
+                 <a-list
+                    bordered
+                    size="small"
+                    :locale="{
+                      emptyText : '暂无匹配结果'
+                    }"
+                    :dataSource="filterSymbol"
+                  >
+                    <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+                    <div slot="header">共有{{filterSymbol.length}}条相关</div>
+                </a-list>
+               </div>
+          </a-dropdown>
         </a-form-item>
         <a-button shape="circle"
                   icon="search"
                   @click="search"
                   style="margin-top:4px;" />
+        <span style="font-size:13px;margin-left:8px;color:#999;"> 相关联想词只是提示作用。交易对格式必须为：<strong>ETH-BTC</strong></span>          
       </a-form>
     </a-card>
     <a-card title="现货交易"
@@ -318,10 +335,15 @@ export default {
       arr: [],
       radioValue: "",
       table3Load : false,
-      form: this.$form.createForm(this),
+      form: this.$form.createForm(this,{
+        onValuesChange : (item,values)=>{
+          this.gainFilterSymbol(values.money);
+        }
+      }),
       form1: this.$form.createForm(this),
       form2: this.$form.createForm(this),
       autoFreshTime : '',
+      filterSymbol : [],
       sum1 : '',
       sum2 : '',
       hisForm : {time : '',accountid : ''},
@@ -355,6 +377,9 @@ export default {
     },
     initInfo(){
       return this.$store.state.initInfo;
+    },
+    oneSymbol(){
+      return this.$store.state.allSymbol[this.marketInfo.market];
     },
     options(){
       return this.$store.state.selectData.sumOptions;
@@ -470,6 +495,7 @@ export default {
     arr.push( { title: '操作', dataIndex: 'action', key: '10' , width : 100, scopedSlots : {customRender : 'action'}});
     this.columes1 = Object.assign([],arr);
     this.$store.dispatch('subscribeMarket');
+    
   },
   beforeDestroy(){
     clearTimeout(this.autoFreshTime);
@@ -480,29 +506,69 @@ export default {
     });
   },
   methods: {
-    gainValue() {
+    gainValue(item) {
+      // 切换交易所
+      // 1.清除之前选择客户号
+      // 2.判断当前交易对是否有效
+      // 3.清除上次的行情订阅
+
+      // 清除上次选择的客户号
+      this.form1.setFieldsValue({
+          num : ''
+      });
+      this.form2.setFieldsValue({
+          num : ''
+      })
+      // 切换交易所 更新过滤
+      let symbol =  this.form.getFieldValue('money');  //获取当前交易对
+      this.gainFilterSymbol(symbol);  //进行交易对比对
+      if(this.filterSymbol.length == 0){
+        this.$message.error(`${this.marketInfo.market}下未找到交易对：${symbol}，订阅行情失败！`);
+        this.$store.dispatch('subscribeMarket',{onlyCancle : true });
+        return ;
+      }
       this.search();
+    },
+    gainFilterSymbol(value){
+        let str = value.replace('-','').toUpperCase();
+          if(this.oneSymbol){
+            let arr = this.oneSymbol.filter((v)=>{
+              let reg = new RegExp("^" + str,"gim");
+              let v1 = v.replace("-",'');
+              return reg.test(v1);
+            })
+            this.filterSymbol = Object.assign([],arr);
+       }
     },
     search() {
        this.form.validateFields((err, values) => {
         if (!err) {
-          // 需要去重新检查当前交易所所拥有的客户号 TODO
-          this.$store.state.marketInfo.currency = values.money;
-          clearTimeout(this.autoFreshTime);
-          this.autoFreshTime = '';
-          this.$store.dispatch('subscribeMarket').then(_=>{
-            // 重置客户号
-            this.form1.setFieldsValue({
-              num : '',
-              sum : ''
-            })
-            this.form2.setFieldsValue({
-              num : '',
-              sum : ''
-            })
-          }).catch(()=>{
-            this.$message.warning('查看行情信息失败!');
-          })
+            if(this.filterSymbol.length != 0){
+              this.$store.state.marketInfo.currency = values.money;
+              clearTimeout(this.autoFreshTime);
+              this.autoFreshTime = '';
+              this.$store.dispatch('subscribeMarket').then(_=>{
+                // 重置客户号
+                this.form1.setFieldsValue({
+                  num : '',
+                  sum : ''
+                })
+                this.form2.setFieldsValue({
+                  num : '',
+                  sum : ''
+                })
+              }).catch(()=>{
+                this.$message.warning('查看行情信息失败!');
+              })
+            }else{
+              this.$message.error(`${this.marketInfo.market}下未找到交易对：${values.money}，订阅行情失败！`);
+              this.$store.dispatch('subscribeMarket',{onlyCancle : true });
+            }
+        }else{
+          // 切换的时候货币对不合法
+          this.gainFilterSymbol(values.money);
+          this.$message.error('当前交易对格式错误，订阅行情失败！');
+            this.$store.dispatch('subscribeMarket',{onlyCancle : true });
         }
       });
     },

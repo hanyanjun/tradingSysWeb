@@ -149,5 +149,9 @@ export  default{
   },
   getOrders({accountid,symbol,exchange, start = '1552015958636', end = String(Date.parse(new Date()))}){
     return gAJAX(`/api/getorders?accountid=${accountid}&exchange=${exchange}&start=${start}&end=${end}`)
+  },
+  // 获取交易市场 交易对
+  getSymbols(exchange){
+    return gAJAX(`/api/getsymbols?exchange=${exchange}`);
   }
 }

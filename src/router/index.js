@@ -73,6 +73,7 @@ rout.beforeEach((to,from,next)=>{
           store.dispatch('loginWS').then(_=>{
             // 获取所有的账户
             store.dispatch('gainAllAccount').then(obj=>{
+              store.dispatch('gainAllSymbol');
               next();
             })
           })

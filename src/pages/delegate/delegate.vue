@@ -129,10 +129,35 @@
         <a-form-item label="交易对"
                      :label-col="{ span: 6}"
                      :wrapper-col="{ span: 14 }">
-          <a-input placeholder="示例：ETH-BTC"  
-                     :disabled="formType == 'edit'"
-                   v-decorator="['symbol', {rules: [{ required: true, message: '请输入交易对'  } , {pattern : formType == 'add' ? new RegExp(/[A-Z]+-[A-Z]+/) : null, message : '请输入正确格式'}]}]">
-          </a-input>
+
+                     
+            <a-dropdown :trigger="['click']">
+                <a-input placeholder="示例：ETH-BTC"  
+                          autocomplete="off"
+                          :disabled="formType == 'edit'"
+                        v-decorator="['symbol', {rules: [{ required: true, message: '请输入交易对'  } , {pattern : formType == 'add' ? new RegExp(/[A-Z]+-[A-Z]+/) : null, message : '请输入正确格式'}]}]">
+                </a-input>
+               <div slot="overlay" :style="filterSymbol.length > 0 ? 'max-height:200px;overflow-y:scroll;background:white' : 'overflow:hidden;background:white'">
+                 <a-list
+                    bordered
+                    size="small"
+                    :locale="{
+                      emptyText : '暂无匹配结果'
+                    }"
+                    :dataSource="filterSymbol"
+                  >
+                    <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+                    <div slot="header">共有{{filterSymbol.length}}条相关</div>
+                </a-list>
+               </div>
+          </a-dropdown>
+          
+                    <a-tooltip placement="topLeft" >
+                      <template slot="title">
+                        <span>相关联想词只是提示作用，填写交易对之前请先选择交易市场，交易对格式必须为：<strong>ETH-BTC</strong></span>
+                      </template>
+                        <a-icon class="suff_icon" type="question-circle" />
+                    </a-tooltip>
         </a-form-item>
         <a-form-item label="交易所客户号"
                      :label-col="{ span: 6 }"
@@ -366,6 +391,8 @@ export default {
       editId : '',
       dialogShow: false,
       confirmLoading: false,
+      oneSymbol : [],
+      filterSymbol : [],
       celueIndex: "1",
       celueTypes: [],
       clientAcc: [],
@@ -390,6 +417,9 @@ export default {
   computed: {
     columns() {
       return this.$store.state.selectData.trustTable;
+    },
+    allSymbol(){
+      return this.$store.state.allSymbol;
     },
     column1() {
       return this.$store.state.selectData.hisTaskTable;
@@ -434,6 +464,10 @@ export default {
             values.rate = values.rate / 100;
             switch(this.formType){
                 case "add":
+                  if(this.filterSymbol.length == 0){
+                    this.$message.error(`${values.exchange}中未找到交易对：${values.symbol}`);
+                    return ;
+                  }
                     this.$api.newstone(values).then(obj => {
                         this.$message.success('新增委托成功!');
                         this.init();
@@ -525,8 +559,27 @@ export default {
         keys: nextKeys
       });
     },
+    gainFilterSymbol(symbol){
+      let str = symbol.replace('-','').toUpperCase();
+          if(this.oneSymbol){
+            let arr = this.oneSymbol.filter((v)=>{
+              let reg = new RegExp("^" + str,"gim");
+              let v1 = v.replace("-",'');
+              return reg.test(v1);
+            })
+            this.filterSymbol = Object.assign([],arr);
+          }
+    },
     formValueChange(item, values) {
-      let { celue, exchange } = values;
+      let { celue, exchange , symbol } = values;
+      if(exchange){
+        this.oneSymbol = Object.assign([],this.allSymbol[exchange]);
+        // 获取输入的symbol 并进行过滤
+        this.gainFilterSymbol(this.form.getFieldValue('symbol') || '');
+      }
+      if(symbol == '' || symbol){
+         this.gainFilterSymbol(symbol);
+      }
       if (celue) {
         this.celueIndex = celue; 
         if(this.formType == 'add'){

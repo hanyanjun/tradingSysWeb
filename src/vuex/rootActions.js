@@ -1,6 +1,7 @@
 
 import Stomp from "stompjs";
 import api from "../fetch/api";
+import * as staticData from "../staticData/staticData";
 let dateFormat = require("format-datetime");
 export default {
     loginWS({state,dispatch},payload){ 
@@ -41,6 +42,10 @@ export default {
                 state.marketInfo.subscribe.unsubscribe();
                 state.marketInfo.subscribe = '';
                 state.marketInfo.firstLoad = 0;
+            }
+            // 当只是取消行情订阅的时候  不进行下次行情订阅
+            if(payload && payload.onlyCancle) {
+                return
             }
             // 生成一次新的订阅
             let {exchangeName,market,currency} = state.marketInfo;
@@ -279,6 +284,26 @@ export default {
                 resolve();
             })
 
+        })
+    },
+    // 获取所有交易所下对应的货币对
+    gainAllSymbol({state,dispatch}){
+        let arr = staticData.d1;
+        arr.forEach((v)=>{
+            dispatch('gainOneSymbol',v.value);
+        })
+    },
+    gainOneSymbol({state,dispatch},payload){
+        api.getSymbols(payload).then(obj=>{
+            // console.log(obj);
+            let str = obj.data;
+            str = str.replace(/({|})/g,'');
+            let arr = str.split(',');
+            let arr1 = arr.map((v)=>{
+                return v.toUpperCase();
+            })
+            state.allSymbol[payload] = arr1;
+            state.allSymbol = Object.assign({},state.allSymbol);
         })
     },
     gainAllAcc({state,dispatch},payload){

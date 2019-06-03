@@ -14,6 +14,7 @@ const state = {
   },  //用来做信息初始化判断
   allSub : [],  //所有的订阅数组
   accName : '',  //用户的账户名
+  allSymbol : {},  //所有交易市场对应的货币对的信息
   initInfo: {
     client: '',
     allAcc : [],
