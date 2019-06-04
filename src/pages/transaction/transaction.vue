@@ -22,11 +22,11 @@
         <a-form-item label="交易对"
                      :label-col="{ span: 6 }"
                      :wrapper-col="{ span: 18 }">
-            <a-dropdown :trigger="['click']">
+            <a-dropdown :trigger="['click']"  :overlayStyle="{'max-height':'200px','overflow-y':'scroll','background':'white','border-bottom':'1px solid #e8e8e8'}" >
               <a-input placeholder="示例：ETH-BTC"
               autocomplete="off"
                    v-decorator="['money', {rules: [{ required: true, message: '请输入交易对'  } , {pattern : new RegExp(/[A-Z]+-[A-Z]+/) , message : '请输入正确格式'}]}]"></a-input>
-               <div slot="overlay"   :style="filterSymbol.length > 0 ? 'max-height:200px;overflow-y:scroll;background:white' : 'overflow:hidden;background:white'">
+               <div slot="overlay" >
                  <a-list
                     bordered
                     size="small"
@@ -35,7 +35,7 @@
                     }"
                     :dataSource="filterSymbol"
                   >
-                    <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+                    <a-list-item slot="renderItem" slot-scope="item, index" @click.stop="setFormValue('money',item)">{{item}}</a-list-item>
                     <div slot="header">共有{{filterSymbol.length}}条相关</div>
                 </a-list>
                </div>
@@ -529,6 +529,12 @@ export default {
       }
       this.search();
     },
+    setFormValue(type,item){
+      let obj = {};
+      obj[type] = item;
+      this.form.setFieldsValue(obj);
+      this.form.validateFields([type]);
+    },
     gainFilterSymbol(value){
         let str = value.replace('-','').toUpperCase();
           if(this.oneSymbol){
@@ -544,6 +550,7 @@ export default {
        this.form.validateFields((err, values) => {
         if (!err) {
             if(this.filterSymbol.length != 0){
+              this.$message.success('正在订阅该行情，请耐心等待！');
               this.$store.state.marketInfo.currency = values.money;
               clearTimeout(this.autoFreshTime);
               this.autoFreshTime = '';
@@ -568,7 +575,7 @@ export default {
           // 切换的时候货币对不合法
           this.gainFilterSymbol(values.money);
           this.$message.error('当前交易对格式错误，订阅行情失败！');
-            this.$store.dispatch('subscribeMarket',{onlyCancle : true });
+          this.$store.dispatch('subscribeMarket',{onlyCancle : true });
         }
       });
     },

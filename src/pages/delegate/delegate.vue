@@ -73,7 +73,7 @@
           <span class="action"
                 slot="action"
                 slot-scope="text , record">
-                <template v-if="record.FinishReason == 0">       
+                <template v-if="!record.Finished">       
                     <a-button @click="handleTask('1',record)" size="small">修改</a-button>
                     <a-popconfirm title="确定删除该任务？"
                                     @confirm="handleTask('2',record)"
@@ -131,13 +131,14 @@
                      :wrapper-col="{ span: 14 }">
 
                      
-            <a-dropdown :trigger="['click']">
+            <a-dropdown :trigger="['click']"  :overlayStyle="{'max-height':'200px','overflow-y':'scroll','background':'white','border-bottom':'1px solid #e8e8e8'}" >
                 <a-input placeholder="示例：ETH-BTC"  
                           autocomplete="off"
                           :disabled="formType == 'edit'"
-                        v-decorator="['symbol', {rules: [{ required: true, message: '请输入交易对'  } , {pattern : formType == 'add' ? new RegExp(/[A-Z]+-[A-Z]+/) : null, message : '请输入正确格式'}]}]">
+                        v-decorator="['symbol', {rules: [{ required: true, message: '请输入交易对'  } , {pattern : formType == 'add' ? new RegExp(/[A-Z]+-[A-Z]+/) : null, message : '请输入正确格式' }]}]">
                 </a-input>
-               <div slot="overlay" :style="filterSymbol.length > 0 ? 'max-height:200px;overflow-y:scroll;background:white' : 'overflow:hidden;background:white'">
+                <!-- :style="filterSymbol.length > 0 ? 'max-height:200px;overflow-y:scroll;background:white' : 'overflow:hidden;background:white'" -->
+               <div slot="overlay"  >
                  <a-list
                     bordered
                     size="small"
@@ -146,7 +147,7 @@
                     }"
                     :dataSource="filterSymbol"
                   >
-                    <a-list-item slot="renderItem" slot-scope="item, index">{{item}}</a-list-item>
+                    <a-list-item slot="renderItem" slot-scope="item, index"  @click.stop="setFormValue('symbol',item)">{{item}}</a-list-item>
                     <div slot="header">共有{{filterSymbol.length}}条相关</div>
                 </a-list>
                </div>
@@ -198,9 +199,13 @@
                    v-decorator="[
                         'total_amount',
                         {rules: [{ required: true, message: '请输入数量' },{validator : isNumVaditor, trigger : 'change'}]}
-                    ]" />
+                    ]" >
+                     <span slot="addonAfter" v-if="form.getFieldValue('symbol') && /-/g.test(form.getFieldValue('symbol'))">
+                        {{form.getFieldValue('symbol').split('-')[0]}}
+                     </span>
+                    </a-input>
         </a-form-item>
-        <a-form-item label="价格"
+        <a-form-item :label="form.getFieldValue('side') ? (form.getFieldValue('side') == 1 ? '价格（不高于）' : '价格（不低于）') : '价格'"
                      :label-col="{ span: 6 }"
                      :wrapper-col="{ span: 14 }">
           <a-input placeholder="请输入价格"
@@ -510,6 +515,12 @@ export default {
         }
       });
     },
+    setFormValue(type,item){
+      let obj = {};
+      obj[type] = item;
+      this.form.setFieldsValue(obj);
+      this.form.validateFields([type]);
+    },
     init(){
         let arr = [];
         this.$api.querystone({sysaccount : window.sessionStorage['user_name']}).then(obj => {
@@ -611,10 +622,12 @@ export default {
       this.formType = 'add';
       this.editId = '';
       this.$nextTick(() => {
-        this.form.resetFields();
-        this.form.setFieldsValue({
-          celue: "1"
-        });
+        // this.form.resetFields();
+        if(!this.form.getFieldValue('celue')){
+          this.form.setFieldsValue({
+            celue: "1"
+          });
+        }
       });
     },
     handleTask(type, item) {
