@@ -354,6 +354,12 @@ const isNumVaditor = function(rule, value, callback) {
       if (rule.field == "min_time_interval" && value < 2) {
         callback(new Error("最小时间为2s"));
       }
+      if(rule.field == 'total_amount'){
+        let s = String(value).split('.');
+        if(s[1] &&  s[1].length > 6){
+          callback(new Error('最多6位小数'));
+        }
+      }
       if (/conditionRange/g.test(rule.field) && value > 100) {
         callback(new Error("触发幅度在0%-100%之间"));
       }
@@ -661,12 +667,13 @@ export default {
                         case "2":
                             let str = item.Additional.replace(/({|})/g,'');
                             let a = str.split(',');
+                            console.log(a);
                             let a1= [null];
                             let a3 = [null];
                             let keys = a.map((v,i)=>{
                                 let a2 =  v.split(":");
-                                a1.push(a2[0]*100);
-                                a3.push(a2[1]*100);
+                                a1.push(Number(a2[0])*100 || 0);
+                                a3.push(Number(a2[1])*100 || 0);
                                 return i+1;
                             })
                             this.form.setFieldsValue({
