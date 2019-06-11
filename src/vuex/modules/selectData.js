@@ -19,6 +19,7 @@ const selectData = {
         trustTable : [
             {title : '序号', dataIndex : 'key' , key : '1', width : 60},
             {title : '市场', dataIndex : 'Exchange' , key : '2',width : 80},
+            {title : '时间', dataIndex : 'Ts' , key : '16',width : 80, scopedSlots : {customRender : 'Ts'}},
             {title : '货币对', dataIndex : 'Symbol' , key : '3' ,width : 100},
             {title : '策略类型', dataIndex : 'dataType' , key : '15',width : 100 , scopedSlots : {customRender : 'dataType'}},
             {title : '操作类型', dataIndex : 'Side' , key : '4',width : 100 , scopedSlots : {customRender : 'Side'}},

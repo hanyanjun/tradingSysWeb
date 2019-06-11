@@ -30,6 +30,9 @@
                  :pagination="{
                    size : 'small'
                  }">
+          <span class="Ts"
+                slot="Ts"
+                slot-scope="text">{{moment(new Date(Number(String(text).substr(0,13)))).format('YYYY-MM-DD HH:mm:ss')}}</span>
           <span class="Side"
                 slot="Side"
                 slot-scope="text"
@@ -348,6 +351,7 @@
 
 <script>
 import isNum from "isnumber-js";
+import moment from 'moment';
 const isNumVaditor = function(rule, value, callback) {
   if (value) {
     if (isNum(value)) {
@@ -401,6 +405,7 @@ export default {
       }),
       formType : 'add',
       editId : '',
+      moment,
       dialogShow: false,
       confirmLoading: false,
       oneSymbol : [],
@@ -536,27 +541,56 @@ export default {
     },
     init(){
         let arr = [];
+        let a1 = []; //进行中的委托
+        let a2 = []; //已完成的委托
         this.$api.querystone({sysaccount : window.sessionStorage['user_name']}).then(obj => {
         if(obj.data){
-        arr = obj.data.map(v => {
-            return { ...v, dataType: "1"};
-        });
+          arr = obj.data.map((v,i) => {
+              return { ...v, dataType: "1"};
+          });
         }
         this.$api.querysttwo({sysaccount : window.sessionStorage['user_name']}).then(obj => {
             let arr1 = [];
             if(obj.data){
-              arr1 = obj.data.map(v => {
-              return { ...v, dataType: "2" };
+              arr1 = obj.data.map((v,i) => {
+              return { ...v, dataType: "2"};
               });
               arr = arr.concat(arr1);
             }
-            let a = [];
-            arr.forEach((v,i)=>{
-                // if(v.FinishReason == 0){
-                    a.push({...v,key : i})
-                // }
+            arr.forEach(v=>{
+              if(v.Finished){
+                a2.push(v);
+              }else{
+                a1.push(v);
+              }
             })
-            this.table1 = a;
+
+            // 对a1按照时间进行排序
+            let len = a1.length;
+                        for(let i = 0 ; i < len -1 ; i++){
+                            for(let j = i +1; j < len ; j++){
+                            if(Number(a1[j].Ts) > Number(a1[i].Ts)){
+                                let tmp = a1[j];  
+                                a1[j] = a1[i];
+                                a1[i] = tmp;              
+                            }
+                            }
+                        };
+            let len1 = a2.length;
+                        for(let i = 0 ; i < len1 -1 ; i++){
+                            for(let j = i +1; j < len1 ; j++){
+                            if(Number(a2[j].Ts) > Number(a2[i].Ts)){
+                                let tmp = a2[j];  
+                                a2[j] = a2[i];
+                                a2[i] = tmp; 
+                            }
+                            }
+                        };
+            let a3 = [...a1,...a2];
+            a3 = a3.map((v,i)=>{
+              return {...v,key : i};
+            })
+            this.table1 = Object.assign([],a3);
             if(this.setTime){
               clearTimeout(this.setTime);
               this.setTime = '';
@@ -564,7 +598,7 @@ export default {
             console.log('更新订单');
             this.setTime = setTimeout(()=>{
               this.init();
-            },2000)
+            },4000)
         });
         });
     },
