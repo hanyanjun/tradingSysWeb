@@ -394,6 +394,7 @@ export default {
         method: ["1", "2"],
         status : ['0','1']
       },
+      setTime : '',
       isNumVaditor: isNumVaditor,
       form: this.$form.createForm(this, {
         onValuesChange: this.formValueChange
@@ -464,6 +465,12 @@ export default {
         return this.table1.filter((v)=>{
             return this.card1.type.indexOf(String(v.Side)) > -1 && this.card1.method.indexOf(v.dataType) > -1 && arr.indexOf(String(v.Finished)) > -1;
         })
+    }
+  },
+  beforeDestroy(){
+    if(this.setTime){
+      clearTimeout(this.setTime);
+      this.setTime = '';
     }
   },
   methods: {
@@ -550,6 +557,14 @@ export default {
                 // }
             })
             this.table1 = a;
+            if(this.setTime){
+              clearTimeout(this.setTime);
+              this.setTime = '';
+            }
+            console.log('更新订单');
+            this.setTime = setTimeout(()=>{
+              this.init();
+            },2000)
         });
         });
     },
