@@ -1,54 +1,45 @@
 <template>
-  <div>
-    <div :style="{ borderBottom: '1px solid #E9E9E9' }">
-      <a-checkbox
-        :indeterminate="indeterminate"
-        @change="onCheckAllChange"
-        :checked="checkAll"
-      >
-        Check all
-      </a-checkbox>
-    </div>
-    <br />
-    <a-row>
-      
-    <a-checkbox-group :options="['Apple']" v-model="checkedList" @change="onChange" />
-    <a-checkbox-group :options="['Pear']" v-model="checkedList" @change="onChange" />
-    <a-checkbox-group :options="['Orange']" v-model="checkedList" @change="onChange" />
-    </a-row>
-  </div>
+  <a-table :columns="columns" :dataSource="data" :scroll="{ x: 1500, y: 300 }">
+    <a slot="action" slot-scope="text" href="javascript:;">action</a>
+  </a-table>
 </template>
 <script>
-const defaultCheckedList = ['Apple', 'Orange']
+const columns = [
+  { title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
+  { title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left' },
+  { title: 'Column 1', dataIndex: 'address', key: '1', width: 150 },
+  { title: 'Column 2', dataIndex: 'address', key: '2', width: 150 },
+  { title: 'Column 3', dataIndex: 'address', key: '3', width: 150 },
+  { title: 'Column 4', dataIndex: 'address', key: '4', width: 150 },
+  { title: 'Column 5', dataIndex: 'address', key: '5', width: 150 },
+  { title: 'Column 6', dataIndex: 'address', key: '6', width: 150 },
+  { title: 'Column 7', dataIndex: 'address', key: '7', width: 150 },
+  { title: 'Column 8', dataIndex: 'address', key: '8' },
+  {
+    title: 'Action',
+    key: 'operation',
+    fixed: 'right',
+    width: 100,
+    scopedSlots: { customRender: 'action' },
+  },
+];
+
+const data = [];
+for (let i = 0; i < 100; i++) {
+  data.push({
+    key: i,
+    name: `Edrward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  });
+}
+
 export default {
-  data () {
+  data() {
     return {
-      checkedList: [],
-      indeterminate: true,
-      checkAll: false,
+      data,
+      columns,
     }
-  },
-  computed:{
-    plainOptions(){
-      return ['Apple', 'Pear', 'Orange']
-    }
-  },
-  methods: {
-    onChange (checkedList) {
-      let {plainOptions} = this;
-      this.indeterminate = !!checkedList.length && (checkedList.length < plainOptions.length)
-      this.checkAll = checkedList.length === plainOptions.length;
-      console.log(checkedList)
-    },
-    onCheckAllChange (e) {
-      let {plainOptions}= this;
-      console.log(this.checkedList)
-      Object.assign(this, {
-        checkedList: e.target.checked ? plainOptions : [],
-        indeterminate: false,
-        checkAll: e.target.checked,
-      })
-    },
-  },
+  }
 }
 </script>

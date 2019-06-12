@@ -15,7 +15,20 @@ function add(a,b){
     }
     return e = Math.pow(10, Math.max(c, d)), (mul(a, e) + mul(b, e)) / e;
  
-	} 
+    } 
+// 小数转百分数函数
+
+ function toPercent(num){
+    let n  = Number(num);
+    if(!n) return 0;
+    let f = String(n).split('.')[1].length -2;
+    f =  (f > 0 ? f : 0)
+    return (Number(n)*100).toFixed(f);
+  }
+
+
+
+
 //乘法函数，用来得到精确的乘法结果 
 //说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。 
 //调用：accMul(arg1,arg2) 
@@ -70,5 +83,6 @@ function mul(a, b) {
         add,
         mul,
         sub,
-        div
+        div,
+        toPercent
     }

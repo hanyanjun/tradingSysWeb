@@ -1,5 +1,6 @@
 <template>
   <div class="delegate">
+    
     <a-card title="进行中的委托"
             :bordered="false"
             :bodyStyle="{padding:0}">
@@ -23,16 +24,27 @@
         </a-col>
       </a-row>
       <a-row style="height:100%;">
+        
+  <!-- <a-table :columns="columns" :dataSource="data" :scroll="{ x: 1500, y: 300 }">
+    <a slot="action" slot-scope="text" href="javascript:;">action</a>
+  </a-table> -->
         <a-table :columns="columns"
                  :dataSource="taskArr"
-                 :scroll="{ y: 520 }"
+                 :scroll="{ x: 1900, y: 550 }"
                  key="1"
                  :pagination="{
-                   size : 'small'
+                   size : 'small',
+                   pageSize : 10 
                  }">
-          <span class="Ts"
-                slot="Ts"
-                slot-scope="text">{{moment(new Date(Number(String(text).substr(0,13)))).format('YYYY-MM-DD HH:mm:ss')}}</span>
+          <span class="condition"
+                slot="condition"
+                slot-scope="text">
+                  <li v-for="(item,index) in text" :key="index" v-if="text" style="margin-bottom:5px;">
+                    <a-tag color="green">{{item[0]}}</a-tag>
+                    <a-tag color="cyan">{{item[1]}}</a-tag>
+                  </li>
+                  <span v-if="!text">---</span>
+                </span>
           <span class="Side"
                 slot="Side"
                 slot-scope="text"
@@ -52,6 +64,7 @@
           <span class="EveryAmount"
                 slot="EveryAmount"
                 slot-scope="text">{{text || '---'}}</span>
+          <span slot="Exchange" slot-scope="text"> <logo :type="text"></logo> {{text}} </span>     
           <span class="Finished"
                 slot="Finished"
                 slot-scope="text">
@@ -62,16 +75,6 @@
             <template v-else>
                 <span class="green">运行中</span>
             </template>
-              <!-- <template v-if="text">
-                <span class="red">已停止</span>
-                <span class="green">运行中</span>
-              </template>
-              <template v-if="text == 1">
-                <span class="gray">已修改</span>
-              </template>
-              <template v-if="text == 2">
-                <span class="red">已停止</span>
-              </template> -->
           </span>
           <span class="action"
                 slot="action"
@@ -203,8 +206,15 @@
                         'total_amount',
                         {rules: [{ required: true, message: '请输入数量' },{validator : isNumVaditor, trigger : 'change'}]}
                     ]" >
-                     <span slot="addonAfter" v-if="form.getFieldValue('symbol') && /-/g.test(form.getFieldValue('symbol'))">
-                        {{form.getFieldValue('symbol').split('-')[0]}}
+                     <span slot="addonAfter" v-if="form.getFieldValue('symbol') && /-/g.test(form.getFieldValue('symbol')) && form.getFieldValue('side')">
+                       <template v-if="form.getFieldValue('side') == 1">
+                         {{form.getFieldValue('symbol').split('-')[1]}}
+                        （可用:{{available[1]}}）
+                       </template>
+                       <template v-else-if="form.getFieldValue('side') == 2">
+                         {{form.getFieldValue('symbol').split('-')[0]}}
+                        （可用:{{available[0]}}）
+                       </template>
                      </span>
                     </a-input>
         </a-form-item>
@@ -352,6 +362,7 @@
 <script>
 import isNum from "isnumber-js";
 import moment from 'moment';
+import logo from "@/components/logo.vue";
 const isNumVaditor = function(rule, value, callback) {
   if (value) {
     if (isNum(value)) {
@@ -420,6 +431,7 @@ export default {
       d4: []
     };
   },
+  components:{logo},
   created() {
     this.d1 = this.$staticData.d2;
     this.d2 = this.$staticData.d3;
@@ -434,6 +446,25 @@ export default {
   computed: {
     columns() {
       return this.$store.state.selectData.trustTable;
+      return  [
+  { title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
+  { title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left' },
+  { title: 'Column 1', dataIndex: 'address', key: '1', width: 150 },
+  { title: 'Column 2', dataIndex: 'address', key: '2', width: 150 },
+  { title: 'Column 3', dataIndex: 'address', key: '3', width: 150 },
+  { title: 'Column 4', dataIndex: 'address', key: '4', width: 150 },
+  { title: 'Column 5', dataIndex: 'address', key: '5', width: 150 },
+  { title: 'Column 6', dataIndex: 'address', key: '6', width: 150 },
+  { title: 'Column 7', dataIndex: 'address', key: '7', width: 150 },
+  { title: 'Column 8', dataIndex: 'address', key: '8' },
+  {
+    title: 'Action',
+    key: 'operation',
+    fixed: 'right',
+    width: 100,
+    scopedSlots: { customRender: 'action' },
+  },
+];
     },
     allSymbol(){
       return this.$store.state.allSymbol;
@@ -446,6 +477,24 @@ export default {
     },
     historyTask() {
       return this.$store.state.historyTask;
+    },
+    accInfo(){
+      return this.$store.state.accInfo;
+    },
+    available(){
+      var arr = this.form.getFieldValue('symbol');
+      var a = [];
+      if(!this.accInfo.info || !this.accInfo.info.info[arr[0]]){
+        a[0] = 0;
+      }else{
+        a[0] = this.accInfo.info.info[arr[0]].Available;
+      }
+      if(!this.accInfo.info || !this.accInfo.info.info[arr[1]]){
+        a[1] = 0;
+      }else{
+        a[1] = this.accInfo.info.info[arr[1]].Available;
+      }
+      return [a[0],a[1]];
     },
     marketTypes() {
       let info = this.$store.state.initInfo.info;
@@ -558,10 +607,30 @@ export default {
               arr = arr.concat(arr1);
             }
             arr.forEach(v=>{
+              let time = moment(new Date(Number(String(v.Ts).substr(0,13)))).format('YYYY/MM/DD HH:mm');
+              let condition =  '';
+              if(v.Additional){
+                let str = v.Additional.replace(/({|})/g,'');
+                let a = str.split(',');
+                let a1= [];
+                if(a[0]){
+                  a1 = a.map((v,i)=>{
+                    let a2 =  v.split(":");
+                    let f1 = a2[0].split('.')[1].length -2;
+                    let f2 = a2[1].split('.')[1].length -2;
+                    f1 = (f1 > 0 ? f1 : 0);
+                    f2 = (f2 > 0 ? f2 : 0);
+                    let s1 =   '触发幅度'+(i+1)+':' + this.$utils.toPercent(a2[0]) + '%' ;
+                    let s2 = '委托比例'+(i+1)+':' +  this.$utils.toPercent(a2[1]) + '%';
+                    return [s1,s2];
+                  })
+                  condition = a1;
+                }
+              }
               if(v.Finished){
-                a2.push(v);
+                a2.push({...v,time,condition});
               }else{
-                a1.push(v);
+                a1.push({...v,time,condition});
               }
             })
 
@@ -637,7 +706,7 @@ export default {
           }
     },
     formValueChange(item, values) {
-      let { celue, exchange , symbol } = values;
+      let { celue, exchange , symbol , accountid } = values;
       if(exchange){
         this.oneSymbol = Object.assign([],this.allSymbol[exchange]);
         // 获取输入的symbol 并进行过滤
@@ -645,6 +714,14 @@ export default {
       }
       if(symbol == '' || symbol){
          this.gainFilterSymbol(symbol);
+      }
+      let ex = exchange || this.form.getFieldValue('exchange');
+      let sy = symbol || this.form.getFieldValue('symbol');
+      let acc = accountid || this.form.getFieldValue('accountid');
+      // 三个有值 并且改变了当前3个值中某一个
+      if(ex && sy && acc && /-/.test(sy)  && (exchange || symbol || accountid) ){
+        this.$store.state.accInfo.market = ex;
+        this.$store.dispatch('accInfo',acc);
       }
       if (celue) {
         this.celueIndex = celue; 
@@ -716,13 +793,12 @@ export default {
                         case "2":
                             let str = item.Additional.replace(/({|})/g,'');
                             let a = str.split(',');
-                            console.log(a);
                             let a1= [null];
                             let a3 = [null];
                             let keys = a.map((v,i)=>{
                                 let a2 =  v.split(":");
-                                a1.push(Number(a2[0])*100 || 0);
-                                a3.push(Number(a2[1])*100 || 0);
+                                a1.push(this.$utils.toPercent(a2[0]) || 0);
+                                a3.push(this.$utils.toPercent(a2[1])|| 0);
                                 return i+1;
                             })
                             this.form.setFieldsValue({
@@ -778,9 +854,11 @@ export default {
 }
 .red {
   color: #ff6666;
+  font-size: 13px;
 }
 .gray {
   color: #cccccc;
+  font-size: 13px;
 }
 .blue {
   color: #1890ff;

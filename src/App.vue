@@ -82,6 +82,11 @@ export default {
     margin: 0!important;
   }
 }
+.ant-table-tbody > tr > td {
+
+word-wrap: break-word;
+word-break: break-all;
+}
 .nopaddingdraw{
   .ant-drawer-body{
     padding :15px 0 !important;
