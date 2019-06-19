@@ -106,6 +106,14 @@
                         'basiccoin'
                     ]" />
         </a-form-item>
+        <a-form-item label="basic coin2"
+                     :label-col="{ span: 6 }"
+                     :wrapper-col="{ span: 14 }">
+          <a-input placeholder="请输入basic coin2"
+                   v-decorator="[
+                        'basiccoin2'
+                    ]" />
+        </a-form-item>
       </a-form>
       <div :style="{
             position: 'absolute',
@@ -229,6 +237,7 @@ export default {
           let obj = {...values,sysaccount : window.sessionStorage['user_name']};
           console.log(values)
           obj.basiccoin = obj.basiccoin || 'BTC';
+          obj.basiccoin2 = obj.basiccoin2 || 'USDT';
           if(this.formType == 'add'){
             this.$api.addAcc(obj).then(obj=>{
               this.$message.success('新增API成功！');
@@ -261,6 +270,7 @@ export default {
                 access_key : item.access_key,
                 serect_key : item.serect_key,
                 basiccoin : item.basiccoin,
+                basiccoin2 : item.basiccoin2 || 'USDT',
                 reserved1 : item.reserved1
             });
           }else{   
@@ -270,6 +280,7 @@ export default {
                 access_key : item.access_key,
                 serect_key : item.serect_key,
                 basiccoin : item.basiccoin,
+                basiccoin2 : item.basiccoin2 || 'USDT',
                 reserved1 : item.reserved1
             });
           }
@@ -292,7 +303,8 @@ export default {
       this.$nextTick(() => {
         this.form.resetFields();
         this.form.setFieldsValue({
-              basiccoin : 'BTC'
+              basiccoin : 'BTC',
+              basiccoin2 : 'USDT'
         });
       });
     }

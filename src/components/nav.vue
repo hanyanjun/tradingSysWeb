@@ -18,6 +18,12 @@
     <a-menu-item key="allAcc" @click="skip('/home/allAcc')" >
       <a-icon type="gold" />API管理
     </a-menu-item>
+    <a-menu-item key="fundManage" @click="skip('/home/fundManage')" >
+      <a-icon type="wallet" />基金管理
+    </a-menu-item>
+    <!-- <a-menu-item key="charts" @click="skip('/home/charts')" >
+      <a-icon type="line-chart" />资产图表
+    </a-menu-item> -->
   </a-menu>
 </template>
 <script>

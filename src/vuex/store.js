@@ -19,6 +19,7 @@ const state = {
     client: '',
     allAcc : [],
     info : {},
+    index : {},
     allAccOptions : []
   },  //一些基础的信息 包含账户信息  socket链接 
   allAccInfo :{ 

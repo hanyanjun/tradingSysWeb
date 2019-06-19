@@ -21,9 +21,13 @@ function add(a,b){
  function toPercent(num){
     let n  = Number(num);
     if(!n) return 0;
-    let f = String(n).split('.')[1].length -2;
-    f =  (f > 0 ? f : 0)
-    return (Number(n)*100).toFixed(f);
+    if(/\./g.test(String(n))){
+        let f = String(n).split('.')[1].length -2;
+        f =  (f > 0 ? f : 0)
+        return (Number(n)*100).toFixed(f);
+    }else{
+        return (Number(n)*100).toFixed(0);
+    }
   }
 
 

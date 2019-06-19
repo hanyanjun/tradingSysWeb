@@ -93,15 +93,15 @@ export  default{
     return gAJAX(`/api/deleteuser?user_name=${user_name}&password=${md5(password)}`)
   },
   // 增加客户号
-  addAcc({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,reserved1,account}){
-    return gAJAX(`/api/addapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}${reserved1 ? '&reserved1='+reserved1 : ''}&account=${account}`)
+  addAcc({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,basiccoin2,reserved1,account}){
+    return gAJAX(`/api/addapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}&basiccoin2=${basiccoin2}${reserved1 ? '&reserved1='+reserved1 : ''}&account=${account}`)
   },
-  testapikey({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,reserved1}){
-    return gAJAX(`/api/testapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}&reserved1=${reserved1}`)
+  testapikey({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,basiccoin2,reserved1}){
+    return gAJAX(`/api/testapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}&basiccoin2=${basiccoin2}&reserved1=${reserved1}`)
   },
   // 修改客户号
-  modifyAcc({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,reserved1,account}){
-    return gAJAX(`/api/modifyapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}${reserved1 ? '&reserved1='+reserved1 : ''}&account=${account}`)
+  modifyAcc({sysaccount,exchange,account_id,access_key,serect_key,basiccoin,basiccoin2,reserved1,account}){
+    return gAJAX(`/api/modifyapikey?sysaccount=${sysaccount}&exchange=${exchange}&account_id=${account_id}&access_key=${access_key}&serect_key=${serect_key}&basiccoin=${basiccoin}&basiccoin2=${basiccoin2}${reserved1 ? '&reserved1='+reserved1 : ''}&account=${account}`)
   },
   // 删除客户号
   deleAcc({sysaccount,exchange,account_id}){
@@ -153,5 +153,22 @@ export  default{
   // 获取交易市场 交易对
   getSymbols(exchange){
     return gAJAX(`/api/getsymbols?exchange=${exchange}`);
+  },
+//  -------------------------------------- 基金相关 -----------------------------------------
+  newFundAcc({sysaccount,include_account,name}){
+    return gAJAX(`/api/newfundaccount?sysaccountid=${sysaccount}&name=${name}&include_account=${include_account}`)
+  },
+  updateFundAcc({id,include_account,name}){
+    return gAJAX(`/api/updatefundaccount?id=${id}&name=${name}&include_account=${include_account}`)
+  },
+  deleFundAcc(id){
+    return gAJAX(`/api/deletefundaccount?id=${id}`)
+  },
+  gainFundAcc(sysaccount){
+    return gAJAX(`/api/queryfundaccount?sysaccountid=${sysaccount}`)
+  },
+  // ----------------------------------  图表相关 -----------------------------------------
+  gainTotalBalance({exchange,account_id,beginday,endday}){
+    return gAJAX(`/api/gettotalbalance?exchange=${exchange}&account_id=${account_id}&beginday=${beginday}&endday=${endday}`)
   }
 }

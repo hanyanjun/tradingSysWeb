@@ -30,7 +30,7 @@
   </a-table> -->
         <a-table :columns="columns"
                  :dataSource="taskArr"
-                 :scroll="{ x: 1900, y: 550 }"
+                 :scroll="{  y: 480 }"
                  key="1"
                  :pagination="{
                    size : 'small',
@@ -482,7 +482,8 @@ export default {
       return this.$store.state.accInfo;
     },
     available(){
-      var arr = this.form.getFieldValue('symbol');
+      var arr = this.form.getFieldValue('symbol').split('-');
+      console.log(arr);
       var a = [];
       if(!this.accInfo.info || !this.accInfo.info.info[arr[0]]){
         a[0] = 0;
@@ -494,6 +495,7 @@ export default {
       }else{
         a[1] = this.accInfo.info.info[arr[1]].Available;
       }
+      console.log(this.accInfo);
       return [a[0],a[1]];
     },
     marketTypes() {
@@ -616,12 +618,8 @@ export default {
                 if(a[0]){
                   a1 = a.map((v,i)=>{
                     let a2 =  v.split(":");
-                    let f1 = a2[0].split('.')[1].length -2;
-                    let f2 = a2[1].split('.')[1].length -2;
-                    f1 = (f1 > 0 ? f1 : 0);
-                    f2 = (f2 > 0 ? f2 : 0);
-                    let s1 =   '触发幅度'+(i+1)+':' + this.$utils.toPercent(a2[0]) + '%' ;
-                    let s2 = '委托比例'+(i+1)+':' +  this.$utils.toPercent(a2[1]) + '%';
+                    let s1 =   '触发幅度'+(i+1)+':' + this.$utils.toPercent(a2[0] || 0) + '%' ;
+                    let s2 = '委托比例'+(i+1)+':' +  this.$utils.toPercent(a2[1] || 0) + '%';
                     return [s1,s2];
                   })
                   condition = a1;

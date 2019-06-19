@@ -53,6 +53,16 @@ const rout =  new Router({
           component:  resolve => require(['../pages/allAcc/allAcc'], resolve),
         },
         {    
+          path : '/home/charts',
+          name : 'charts',
+          component:  resolve => require(['../pages/charts/charts'], resolve),
+        },
+        {    
+          path : '/home/fundManage',
+          name : 'fundManage',
+          component:  resolve => require(['../pages/fundManage/fundManage'], resolve),
+        },
+        {    
           path : '/home/test',
           name : 'test',
           component:  resolve => require(['../pages/test/test'], resolve),

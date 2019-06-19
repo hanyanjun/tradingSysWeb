@@ -260,6 +260,7 @@ export default {
                     let info  = {};
                     let arr = [];
                     let arr1 = [];
+                    let index = {};
                     let filter = obj.data.filter((v)=>{
                         return v.isavailable  == 1;
                     })
@@ -268,6 +269,9 @@ export default {
                             info[v.exchange] = [];
                         }
                         info[v.exchange].push({label : v.account , value : v.account_id});
+                        index[v.exchange+v.account_id] = v.account;
+                        index[v.exchange+v.account] = v.account_id;
+                        
                     })
                     filter.forEach((v,i)=>{
                         arr.push({...v,key : i , str : v.exchange + '_' + v.account_id});
@@ -275,11 +279,16 @@ export default {
                     })
                     state.initInfo.allAcc = Object.assign([],arr);
                     state.initInfo.allAccOptions = Object.assign([],arr1);
-                    state.initInfo.info = Object.assign([],info);
+                    state.initInfo.info = Object.assign({},info);
+                    state.initInfo.index = Object.assign({},index);
+                    state.initInfo = Object.assign({},state.initInfo);
+                    console.log(state.initInfo)
                 }else{
                     state.initInfo.allAcc = Object.assign([],[]);
                     state.initInfo.allAccOptions = Object.assign([],[]);
-                    state.initInfo.info = Object.assign([],[]);
+                    state.initInfo.info = Object.assign({},{});
+                    state.initInfo.index = Object.assign({},{});
+                    state.initInfo = Object.assign({},state.initInfo);
                 }
                 resolve();
             })
