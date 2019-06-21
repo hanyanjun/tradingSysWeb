@@ -4,6 +4,7 @@ import getters from "./rootGetters"
 import mutations from "./rootMutations"
 import actions from "./rootActions"
 import selectData from "./modules/selectData"
+import fund from "./modules/fundManage"
 
 Vue.use(Vuex)
 
@@ -65,6 +66,7 @@ export default new Vuex.Store({
   state, mutations, getters, actions,
   modules: {
     selectData,
+    fund
   }
 })
 

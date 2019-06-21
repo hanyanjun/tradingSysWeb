@@ -75,6 +75,9 @@ export default {
   beforeCreate () {
     this.form = this.$form.createForm(this);
   },
+  data(){return {
+    s : ''
+  }},
   created(){
     this.$store.dispatch('clearSub');
   },

@@ -4,6 +4,7 @@ var md5 = require('js-md5');
 //axios 的默认配置修改
 axios.defaults.timeout = 50000000000000;
 axios.defaults.baseURL = 'http://119.28.57.96:8000';
+// axios.defaults.baseURL = 'http://172.16.0.86:8000';
 // axios.defaults.headers.common['Referer'] = '';
 axios.interceptors.request.use(function (config) {
     return config;

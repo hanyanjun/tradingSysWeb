@@ -74,32 +74,33 @@ const rout =  new Router({
 
 rout.beforeEach((to,from,next)=>{
   // 登陆注册页面不需要进行init的初始化
-  if(to.meta.isInit != 'false'){
-    // 如果未进行登陆 进行强制跳转
-    if(window.sessionStorage['user_name']){
-      if(store.state.initStatus.isOver == false){
-        // 进行信息的初始化 登陆websocket 保证进入页面的时候websocket已经进行链接
-        store.dispatch("init").then(_=>{
-          store.dispatch('loginWS').then(_=>{
-            // 获取所有的账户
-            store.dispatch('gainAllAccount').then(obj=>{
-              store.dispatch('gainAllSymbol');
-              next();
-            })
-          })
-        })
-      }else{
-        store.dispatch('clearSub').then(_=>{
-          next()
-        })
-      }
-    }else{
-      store.state.initStatus.isOver = true;
-      next('/login');
-    }
-  }else{
-    store.state.initStatus.isOver = true;
-    next();
-  }
+  // if(to.meta.isInit != 'false'){
+  //   // 如果未进行登陆 进行强制跳转
+  //   if(window.sessionStorage['user_name']){
+  //     if(store.state.initStatus.isOver == false){
+  //       // 进行信息的初始化 登陆websocket 保证进入页面的时候websocket已经进行链接
+  //       store.dispatch("init").then(_=>{
+  //         store.dispatch('loginWS').then(_=>{
+  //           // 获取所有的账户
+  //           store.dispatch('gainAllAccount').then(obj=>{
+  //             store.dispatch('gainAllSymbol');
+  //             next();
+  //           })
+  //         })
+  //       })
+  //     }else{
+  //       store.dispatch('clearSub').then(_=>{
+  //         next()
+  //       })
+  //     }
+  //   }else{
+  //     store.state.initStatus.isOver = true;
+  //     next('/login');
+  //   }
+  // }else{
+  //   store.state.initStatus.isOver = true;
+  //   next();
+  // }
+  next();
 })
 export default rout;

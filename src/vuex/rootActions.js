@@ -345,7 +345,7 @@ export default {
                     //     {Symbol : 'BTC4' , Available : '1' , OnOrders : '2', BtcValue : 4}]};
                     if(info.Data){
                         let a1 = info.Data.filter((v)=>{
-                            return v.BtcValue > 0.001;
+                            return v.BtcValue >= 0.001;
                         })
                         let a = JSON.parse(JSON.stringify(a1));
                         let len = a.length;
