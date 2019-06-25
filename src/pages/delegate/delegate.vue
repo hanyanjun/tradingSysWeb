@@ -534,6 +534,21 @@ export default {
       this.form.validateFields((err, values) => {
           console.log(err);
         if (!err) {
+          // 当委托总量小于持仓数的时候 提示用户总量小于持仓
+          if(values.side == 2 && this.available[0] < values.total_amount){
+                   this.$confirm({
+                    title: '当前委托总量小于持仓量，是否建立委托？',
+                    onOk() {
+                      add.call(this);
+                    },
+                    onCancel() {},
+                  });
+
+
+              retun;
+          }
+          add.call(this);
+          function add(){
           if (this.celueIndex == 1) {
             values.rate = values.rate / 100;
             switch(this.formType){
@@ -581,6 +596,8 @@ export default {
             }
           }
           this.dialogShow = false;
+          }
+
         }
       });
     },

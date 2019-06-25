@@ -2,7 +2,7 @@
 import Stomp from "stompjs";
 import api from "../fetch/api";
 import * as staticData from "../staticData/staticData";
-let dateFormat = require("format-datetime");
+let date = require("format-datetime");
 export default {
     loginWS({state,dispatch},payload){ 
         return new Promise((resolve)=>{

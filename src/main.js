@@ -10,6 +10,7 @@ import store from './vuex/store'
 import 'ant-design-vue/dist/antd.css';
 import * as staticData from "./staticData/staticData";
 import * as utils from "./utils/utils";
+import echarts from 'echarts';
 import isNum from "isnumber-js";
 let dateFormat = require("format-datetime");
 Vue.prototype.$staticData = staticData;
@@ -18,6 +19,7 @@ Vue.prototype.$http = axios;
 Vue.prototype.$time = dateFormat;
 Vue.prototype.$utils = utils;
 Vue.prototype.$isNum = isNum;
+Vue.prototype.$echarts = echarts;
 Vue.use(antd);
 
 Vue.config.productionTip = false

@@ -1,6 +1,6 @@
 <template>
   <div class="charts">
-    <a-tabs defaultActiveKey="2"
+    <a-tabs defaultActiveKey="1"
             @change="callback">
       <a-tab-pane key="1">
         <span slot="tab">
@@ -34,6 +34,9 @@ import chart3 from "./chart3";
 export default {
   name: "charts",
   components : {chart1,chart3,chart2},
+  created(){
+    this.$store.dispatch("gainAllFund");
+  },
   methods: {
     callback(item) {
       console.log(item);

@@ -24,7 +24,7 @@ const selectData = {
             {title : '策略类型', dataIndex : 'dataType' , key : '15' ,  width : 90 ,scopedSlots : {customRender : 'dataType'}},
             {title : '交易类型', dataIndex : 'Side' , key : '4' , width : 60 , scopedSlots : {customRender : 'Side'}},
             {title : '价格上限', dataIndex : 'Price' ,  width : 60 ,key : '5'},
-            {title : '已下单数量', dataIndex : 'OrderPlaced' , key : '14' ,   width : 80 ,scopedSlots : {customRender : 'OrderPlaced'}},
+            {title : '已发送系统数量', dataIndex : 'OrderPlaced' , key : '14' ,   width : 80 ,scopedSlots : {customRender : 'OrderPlaced'}},
             {title : '档位范围', dataIndex : 'PriceRange' , key : '6' , width : 60 ,scopedSlots : {customRender : 'PriceRange'}},
             {title : '委托比例', dataIndex : 'Rate' , key : '7', width : 60 ,scopedSlots : {customRender : 'Rate'}},
             {title : '总委托数量', dataIndex : 'TotalAmount' , key : '8', width : 60 ,scopedSlots : {customRender : 'TotalAmount'}},
