@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       type: "1",
-      isShow : false,
+      isShow : true,
       myChart: {},
     };
   },
@@ -53,7 +53,6 @@ export default {
       var dom = document.getElementById("container1");
       var myChart = this.$echarts.init(dom);
       this.myChart = myChart;
-      this.setChart({});
     },
     updateCharts(values){
       this.isShow = false;
@@ -65,26 +64,26 @@ export default {
     setChart(obj) {
       console.log(obj);
       this.myChart.hideLoading();
-      if(!obj || Object.keys(obj).length == 0){
-              this.isShow = true;
-              this.myChart.setOption({
-                title : {
-                  text : '股权配置图'
-                },
-                xAxis: {
-                    type: 'category',
-                    data: []
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [{
-                    data: [],
-                    type: 'line'
-                }]
-              })
-              return;
-      }
+      // if(!obj || Object.keys(obj).length == 0){
+      //         this.isShow = true;
+      //         this.myChart.setOption({
+      //           title : {
+      //             text : '股权配置图'
+      //           },
+      //           xAxis: {
+      //               type: 'category',
+      //               data: []
+      //           },
+      //           yAxis: {
+      //               type: 'value'
+      //           },
+      //           series: [{
+      //               data: [],
+      //               type: 'line'
+      //           }]
+      //         })
+      //         return;
+      // }
       let date = Object.keys(obj);
       let now = moment(new Date())
         .format("YYYY/MM/DD HH")
@@ -110,6 +109,8 @@ export default {
       let serie = names.map(_ => {
         return { type: "line", smooth: true, seriesLayoutBy: "row" };
       });
+      console.log(arr);
+      console.log(serie);
       var option = {
         legend: {},
         title : {

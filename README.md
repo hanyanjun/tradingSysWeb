@@ -14,13 +14,13 @@
 1.基金账户增加 | √ | × | 无 | 待确认 | 无
 2.基金账户修改 | √ | × | 无 | 待确认 | 无
 3.基金账户删除 | √ | × | 无 | 待确认 | 无
-4.净值图 | √×| × | 无 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/净值图1.png){:height="100" width="100"}
-5.股权配置图 | √ | × | 当前按照币种显示有几个币种就有几条折线图，另外增加总币数量的变化的线 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/股权配置图1.png){:height="100" width="100"}
-6.仓位变化表 | √ | × | 当前按照币种显示每天的各个币种增加或者减少数量的变化 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/仓位变化图.png){:height="100" width="100"}
+4.净值图 | √×| × | 无 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/净值图1.png)
+5.股权配置图 | √ | × | 当前按照币种显示有几个币种就有几条折线图，另外增加总币数量的变化的线 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/股权配置图1.png)
+6.仓位变化表 | √ | × | 当前按照币种显示每天的各个币种增加或者减少数量的变化 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/仓位变化图.png)
 7.历史订单时间戳具体到分秒 | √ | × | 无 | √ | 无
-8.委托增加委托量和持仓对比 | √ | × | 目前当委托量小于持仓量会有二次确认是否增加委托 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/委托量判断.png){:height="100" width="100"}
-9.现货交易买入增加委托量和持仓对比 | √ | × | 目前当下单量小于持仓量会有二次确认是否执行下单 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/下单量判断.png){:height="100" width="100"}
-10.现货交易卖出增加委托量和持仓对比 | √ | × | 目前当下单量小于持仓量会有二次确认是否执行下单 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/下单量判断.png){:height="100" width="100"}
+8.委托增加委托量和持仓对比 | √ | × | 目前当委托量小于持仓量会有二次确认是否增加委托 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/委托量判断.png)
+9.现货交易买入增加委托量和持仓对比 | √ | × | 目前当下单量小于持仓量会有二次确认是否执行下单 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/下单量判断.png)
+10.现货交易卖出增加委托量和持仓对比 | √ | × | 目前当下单量小于持仓量会有二次确认是否执行下单 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/下单量判断.png)
 
 >未完成
 

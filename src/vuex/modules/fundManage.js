@@ -25,7 +25,7 @@ const fund = {
         api.gainTotalBalance(payload).then(obj => {
           if(obj.data){
           let arr = Object.assign([], obj.data);
-        //   let arr = JSON.parse(JSON.stringify(d.data2));
+          // let arr = JSON.parse(JSON.stringify(d.data2));
           arr = arr.map((v, i) => {
             if (v.endbalance && v.endbalance != '{}') {
               arr[i].endbalance = JSON.parse(arr[i].endbalance);
@@ -45,7 +45,7 @@ const fund = {
             })
           } else {
             dispatch('detail1', arr).then(obj=>{
-                resolbe(obj)
+                resolve(obj)
             })
           }
           }else{
@@ -142,7 +142,7 @@ const fund = {
           all0 = Number(v.beginprice) || 0;
         }
         date.push(d1, d2);
-        if (!obj[d1] && v.beginbalance) {
+        if (!obj[d1] && v.beginbalance && v.beginbalance != '{}') {
           obj[d1] = {
             total: 0,
             name: [],
@@ -152,7 +152,7 @@ const fund = {
             allPrice: v.beginprice
           };
         }
-        if (!obj[d2] && v.endbalance) {
+        if (!obj[d2] && v.endbalance && v.endbalance != '{}') {
           obj[d2] = {
             total: 0,
             name: [],
@@ -168,8 +168,8 @@ const fund = {
         // obj[d2].btcValue = v.endbasicvalue ? this.$utils.div(v.endbasicvalue,btc0)  : 0;
         // obj[d2].usdtValue =  v.endbasicvalue2 ? this.$utils.div(v.endbasicvalue2,usdt0) : 0;
         // obj[d2].allPrice = v.endprice ? this.$utils.div(v.endprice,all0) : 0;
-        console.log(v.beginbalance)
-        if (v.beginbalance) {
+          console.log(v);
+        if (v.beginbalance && v.beginbalance != '{}') {
           v.beginbalance.forEach((v1, i1) => {
             let total = utils.add(
               Number(v1.Available || 0),
@@ -194,7 +194,7 @@ const fund = {
             obj[d1].total += total;
           });
         }
-        if (v.endbalance) {
+        if (v.endbalance &&  v.endbalance != '{}') {
           v.endbalance.forEach((v1, i1) => {
             let total = utils.add(
               Number(v1.Available || 0),
@@ -245,7 +245,7 @@ const fund = {
                 usdt0 = Number(v.beginbasicvalue2) || 0;
                 all0 = Number(v.beginprice) || 0;
               }
-              if (!obj[d1] && v.beginbalance) {
+              if (!obj[d1] && v.beginbalance && v.beginbalance != '{}') {
                 obj[d1] = {
                   total: 0,
                   name: [],
@@ -255,7 +255,7 @@ const fund = {
                   allPrice: v.beginprice
                 };
               }
-              if (!obj[d2] && v.endbalance) {
+              if (!obj[d2] && v.endbalance  && v.endbalance != '{}') {
                 obj[d2] = {
                   total: 0,
                   name: [],
@@ -265,7 +265,7 @@ const fund = {
                   allPrice: v.endprice
                 };
               }
-              if (v.beginbalance) {
+              if (v.beginbalance && v.beginbalance != '{}') {
                 let keys = Object.keys(v.beginbalance);
                 // 先把所有的货币对 循环出来
                 let obj1 = {};
@@ -307,7 +307,7 @@ const fund = {
                 obj[d1].part = Object.assign({}, obj1);
               }
       
-              if (v.endbalance) {
+              if (v.endbalance && v.endbalance != '{}') {
                 let keys = Object.keys(v.endbalance);
                 // 先把所有的货币对 循环出来
                 let obj1 = {};
