@@ -25,6 +25,10 @@
     <a-row style="padding:30px;position:relation">
     <div id="container1"
          style="height:600px;"></div>
+    <div class="switch" v-show="!isShow">
+      <span :class="type == '1' ? 'active' : ''" @click.stop="changeType('1')">btc计价</span>
+      <span :class="type == '2' ? 'active' : ''" @click.stop="changeType('2')">usdt计价</span>
+    </div>
     <div class="empty" v-if="isShow">暂无数据</div>
 
     </a-row>
@@ -43,6 +47,7 @@ export default {
       type: "1",
       isShow : true,
       myChart: {},
+      obj : {}
     };
   },
   mounted() {
@@ -57,33 +62,19 @@ export default {
     updateCharts(values){
       this.isShow = false;
       this.myChart.showLoading();
+      this.type == '1';
       this.$store.dispatch("gainFundChartData", values).then(obj=>{
           this.setChart(obj);
+          this.obj = Object.assign({},obj);
       })
     },
+    changeType(type){
+      this.type = type;
+      // this.myChart.showLoading();
+      this.setChart(this.obj);
+    },
     setChart(obj) {
-      console.log(obj);
       this.myChart.hideLoading();
-      // if(!obj || Object.keys(obj).length == 0){
-      //         this.isShow = true;
-      //         this.myChart.setOption({
-      //           title : {
-      //             text : '股权配置图'
-      //           },
-      //           xAxis: {
-      //               type: 'category',
-      //               data: []
-      //           },
-      //           yAxis: {
-      //               type: 'value'
-      //           },
-      //           series: [{
-      //               data: [],
-      //               type: 'line'
-      //           }]
-      //         })
-      //         return;
-      // }
       let date = Object.keys(obj);
       let now = moment(new Date())
         .format("YYYY/MM/DD HH")
@@ -102,7 +93,7 @@ export default {
       });
       date.forEach((v, i) => {
         names.forEach((v1, i1) => {
-          arr[i1].push(obj[v].part[v1] ? obj[v].part[v1].total : 0);
+          arr[i1].push(obj[v].part[v1] ? obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal'] : 0);
         });
       });
       date.unshift("product");
@@ -128,12 +119,12 @@ export default {
         grid: { top: "55%" },
         series: [
           ...serie,
-          {
-            type: "line",
-            smooth: true,
-            data: total,
-            itemStyle: { color: "black" }
-          },
+          // {
+          //   type: "line",
+          //   smooth: true,
+          //   data: total,
+          //   itemStyle: { color: "black" }
+          // },
           {
             type: "pie",
             id: "pie",
@@ -182,5 +173,20 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%)
+}
+.switch{
+  position: absolute;
+  left: 30px;
+  top: 70px;
+  span{
+    display: inline-block;
+    padding: 5px;
+  }
+  .active{
+  color: #1890ff;
+  }
+  &:hover{
+    cursor: pointer;
+  }
 }
 </style>

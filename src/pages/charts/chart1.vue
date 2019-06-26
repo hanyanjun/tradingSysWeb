@@ -55,12 +55,31 @@ export default {
       });
       let a1 = [],
         a2 = [],
-        a3 = [];
+        a3 = [], d1 = '' , d2 = '' , d3 = '';
       date.forEach(v => {
+        if(obj[v].btcValue && !d1){
+          console.log(1);
+          d1 = obj[v].btcValue
+        }
+        if(obj[v].usdtValue && !d2){
+          d2 = obj[v].usdtValue
+        }
+        if(obj[v].allPrice  && !d3){
+          d3 = obj[v].allPrice
+        }
         a1.push(obj[v].btcValue);
         a2.push(obj[v].usdtValue);
         a3.push(obj[v].allPrice);
       });
+      a1 = a1.map(v=>{
+        return v ?  this.$utils.div(v,d1) : 0;
+      })
+      a2 = a2.map(v=>{
+        return v ? this.$utils.div(v,d2) : 0;
+      })
+      a3 = a3.map(v=>{
+        return v ? this.$utils.div(v,d3) : 0;
+      })
       var option = {
         title: {
           text: "净值图"

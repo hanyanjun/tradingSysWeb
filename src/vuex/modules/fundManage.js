@@ -25,7 +25,7 @@ const fund = {
         api.gainTotalBalance(payload).then(obj => {
           if(obj.data){
           let arr = Object.assign([], obj.data);
-          // let arr = JSON.parse(JSON.stringify(d.data2));
+          // let arr = JSON.parse(JSON.stringify(d.data1));
           arr = arr.map((v, i) => {
             if (v.endbalance && v.endbalance != '{}') {
               arr[i].endbalance = JSON.parse(arr[i].endbalance);
@@ -181,14 +181,20 @@ const fund = {
             if (!obj[d1].part[v1.Symbol]) {
               obj[d1].part[v1.Symbol] = {
                 total,
-                part: [v1]
+                part: [v1],
+                btcTotal :  Number(v1.BtcValue || 0),
+                usdtTotal : Number(v1.UsdtValue || 0)
               };
             } else {
               let t = obj[d1].part[v1.Symbol].total;
               let total2 = utils.add(total, t);
+              let total3 = utils.add(obj[d1].part[v1.Symbol].btcTotal,Number(v1.BtcValue || 0))
+              let total4 = utils.add(obj[d1].part[v1.Symbol].UsdtValue,Number(v1.UsdtValue || 0))
               obj[d1].part[v1.Symbol] = {
                 total: total2,
-                part: [...obj[d1].part[v1.Symbol].part, v1]
+                part: [...obj[d1].part[v1.Symbol].part, v1],
+                btcTotal : total3,
+                usdtTotal : total4
               };
             }
             obj[d1].total += total;
@@ -206,14 +212,20 @@ const fund = {
             if (!obj[d2].part[v1.Symbol]) {
               obj[d2].part[v1.Symbol] = {
                 total,
-                part: [v1]
+                part: [v1],
+                btcTotal :  Number(v1.BtcValue || 0),
+                usdtTotal : Number(v1.UsdtValue || 0)
               };
             } else {
               let t = obj[d1].part[v1.Symbol].total;
               let total2 = utils.add(total, t);
+              let total3 = utils.add(obj[d1].part[v1.Symbol].btcTotal,Number(v1.BtcValue || 0))
+              let total4 = utils.add(obj[d1].part[v1.Symbol].UsdtValue,Number(v1.UsdtValue || 0))
               obj[d2].part[v1.Symbol] = {
                 total: total2,
-                part: [...obj[d2].part[v1.Symbol].part, v1]
+                part: [...obj[d2].part[v1.Symbol].part, v1],
+                btcTotal : total3,
+                usdtTotal : total4
               };
             }
             obj[d2].total += total;
@@ -279,6 +291,8 @@ const fund = {
                     if (!obj1[v2.Symbol]) {
                       obj1[v2.Symbol] = {
                         total,
+                        btcTotal :  Number(v2.BtcValue || 0),
+                        usdtTotal : Number(v2.UsdtValue || 0),
                         part: [{
                           exchange: a[0],
                           account: a[1],
@@ -288,8 +302,12 @@ const fund = {
                     } else {
                       let t = obj1[v2.Symbol].total;
                       let total2 = utils.add(total, t);
+                      let total3 = utils.add(obj1[v2.Symbol].btcTotal,Number(v2.BtcValue || 0));
+                      let total4 = utils.add(obj1[v2.Symbol].usdtTotal,Number(v2.UsdtValue || 0));
                       obj1[v2.Symbol] = {
                         total: total2,
+                        btcTotal : total3,
+                        usdtTotal : total4,
                         part: [
                           ...obj1[v2.Symbol].part,
                           {
@@ -321,6 +339,8 @@ const fund = {
                     if (!obj1[v2.Symbol]) {
                       obj1[v2.Symbol] = {
                         total,
+                        btcTotal :  Number(v2.BtcValue || 0),
+                        usdtTotal : Number(v2.UsdtValue || 0),
                         part: [{
                           exchange: a[0],
                           account: a[1],
@@ -330,8 +350,12 @@ const fund = {
                     } else {
                       let t = obj1[v2.Symbol].total;
                       let total2 = utils.add(total, t);
+                      let total3 = utils.add(obj1[v2.Symbol].btcTotal,Number(v2.BtcValue || 0));
+                      let total4 = utils.add(obj1[v2.Symbol].usdtTotal,Number(v2.UsdtValue || 0));
                       obj1[v2.Symbol] = {
                         total: total2,
+                        btcTotal : total3,
+                        usdtTotal : total4,
                         part: [
                           ...obj1[v2.Symbol].part,
                           {
