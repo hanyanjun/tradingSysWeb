@@ -98,9 +98,13 @@ export default {
         e.preventDefault();   
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
             let beginday = moment(values.date[0]).format('YYYY-MM-DD').replace(/-/g,'');
             let endday = moment(values.date[1]).format('YYYY-MM-DD').replace(/-/g,'');
+            let now = moment(new Date()).format('YYYY-MM-DD').replace(/-/g,'');
+            let now1 = moment(new Date()).format('YYYY-MM-DD HH').replace(/-/g,'');
+            if(beginday == endday  &&  now == endday && now1 < now + ' 20'){
+              beginday = moment(new Date().getTime() - 24*60*60*1000).format('YYYY-MM-DD').replace(/-/g,'');
+            }
             let {exchange,account_id} = values;
             this.$emit('gain',{exchange,account_id,beginday,endday});
         }

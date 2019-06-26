@@ -543,9 +543,17 @@ export default {
                     },
                     onCancel() {},
                   });
-
-
-              retun;
+              return;
+          }
+          if(values.side == 1 && this.available[1] < values.total_amount){
+                   this.$confirm({
+                    title: '当前委托总量小于持仓量，是否建立委托？',
+                    onOk() {
+                      add.call(this);
+                    },
+                    onCancel() {},
+                  });
+              return;
           }
           add.call(this);
           function add(){

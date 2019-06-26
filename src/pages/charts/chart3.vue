@@ -43,7 +43,6 @@ export default {
     methods:{
     updateCharts(values) {  
       this.isShow = false;
-      this.myChart.showLoading();
       this.$store.dispatch("gainFundChartData", values).then(obj=>{
           this.setChart(obj);
       })
