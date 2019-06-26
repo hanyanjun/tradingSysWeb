@@ -14,7 +14,7 @@
 1.基金账户增加 | √ | × | 无 | 待确认 | 无
 2.基金账户修改 | √ | × | 无 | 待确认 | 无
 3.基金账户删除 | √ | × | 无 | 待确认 | 无
-4.净值图 | √×| × | 无 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/净值图1.png)
+4.净值图 | √×| × | 暂时未做归一化处理，涉及到某个开始节点没有数据时如何处理 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/净值图1.png)
 5.股权配置图 | √ | × | 当前按照币种显示有几个币种就有几条折线图，另外增加总币数量的变化的线 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/股权配置图1.png)
 6.仓位变化表 | √ | × | 当前按照币种显示每天的各个币种增加或者减少数量的变化 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/仓位变化图.png)
 7.历史订单时间戳具体到分秒 | √ | × | 无 | √ | 无
