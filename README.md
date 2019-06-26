@@ -28,7 +28,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ###### 需求&实现
 
 需求 | 是否实现 | 是否测试 | 必要说明 | 状态
-:-: | :-:
+:-: | :-: | :-: | :-: | :-:
 1.基金账户增加 | √ | × | 无 | 待确认
 2.基金账户修改 | √ | × | 无 | 待确认
 3.基金账户删除 | √ | × | 无 | 待确认
