@@ -22,6 +22,13 @@
 9.现货交易买入增加委托量和持仓对比 | √ | × | 目前当下单量小于持仓量会有二次确认是否执行下单 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/下单量判断.png)
 10.现货交易卖出增加委托量和持仓对比 | √ | × | 目前当下单量小于持仓量会有二次确认是否执行下单 | 待确认 | ![avatar](https://github.com/xorder-project/tradingSystemWeb/tree/master/readmeImgs/下单量判断.png)
 
+
+# 版本修改记录  0.1.1
+> 说明 √：已完成  √× 半完成  ×未完成 
+需求 | 是否实现 | 是否测试 | 必要说明 | 状态 | 图片
+:-: | :-: | :-: | :-: | :-: | :-:
+1.股权配置折线图改为按比例显示 | 否 | 是 | 无 | 待确认 | 无
+
 >未完成
 
 需求 | 进度

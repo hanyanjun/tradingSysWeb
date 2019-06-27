@@ -74,6 +74,7 @@ export default {
       this.setChart(this.obj);
     },
     setChart(obj) {
+      console.log(obj);
       this.myChart.hideLoading();
       let date = Object.keys(obj);
       let now = moment(new Date())
@@ -92,13 +93,36 @@ export default {
         return [v];
       });
       date.forEach((v, i) => {
+        let all = 0;
         names.forEach((v1, i1) => {
-          arr[i1].push(obj[v].part[v1] ? obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal'] : 0);
+          all  = this.$utils.add(all,obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal']);
         });
+        names.forEach((v1,i1)=>{
+          if(obj[v].part[v1]){
+            let percent = this.$utils.div(obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal'],all) * 100;
+            arr[i1].push(percent);
+          }else{
+            arr[i1].push(0);
+          }
+        })
       });
       date.unshift("product");
       let serie = names.map(_ => {
         return { type: "line", smooth: true, seriesLayoutBy: "row" };
+        return {
+                //设置类别
+                seriesLayoutBy: "row" ,
+                type: 'line',
+                //y轴刻度
+                axisLabel: {
+                    //设置y轴数值为%
+                    rotate : 30,
+                    formatter: function(value,index){
+                      console.log(value);
+                      return value;
+                    }  
+                },
+            };
       });
       console.log(arr);
       console.log(serie);
@@ -115,7 +139,13 @@ export default {
           source: [date, ...arr]
         },
         xAxis: { type: "category" },
-        yAxis: { gridIndex: 0 },
+        // yAxis : {gridIndex : 0},
+        yAxis: { gridIndex: 0  , type : 'value', axisLabel: {  
+                            show: true,  
+                            interval: 'auto',  
+                            formatter: '{value} %'
+                            },  
+                        show: true },
         grid: { top: "55%" },
         series: [
           ...serie,
