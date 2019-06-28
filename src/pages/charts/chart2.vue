@@ -92,40 +92,101 @@ export default {
       let arr = names.map(v => {
         return [v];
       });
+      let arr1 = [];
       date.forEach((v, i) => {
         let all = 0;
-        names.forEach((v1, i1) => {
-          all  = this.$utils.add(all,obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal']);
+            if(!arr1[i]){
+              arr1[i]= [];
+            }
+        names.forEach((v1, i1) => {    
+          if(obj[v].part[v1]){
+           all  = this.$utils.add(all,obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal']);
+          }
         });
         names.forEach((v1,i1)=>{
           if(obj[v].part[v1]){
-            let percent = this.$utils.div(obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal'],all) * 100;
-            arr[i1].push(percent);
+            let value = obj[v].part[v1][this.type == '1' ? 'btcTotal' : 'usdtTotal'];
+            value  = value < 0.0000001 ? 0 : value;
+            let percent = (value/all).toFixed(4)
+            if(value){
+              arr1[i].push({name : v1 , value : value})
+            }
+            arr[i1].push(Number((Number(percent)*100).toFixed(2)));
           }else{
             arr[i1].push(0);
           }
         })
       });
+      // 对arr1 进行排序
+      arr1.forEach((vv,ii)=>{
+        let len  = vv.length;
+                  for(let i = 0 ; i < len -1 ; i++){
+                            for(let j = i +1; j < len ; j++){
+                            if(Number(vv[j].value) < Number(vv[i].value)){
+                                let tmp = arr1[ii][j];  
+                                arr1[ii][j] = arr1[ii][i];
+                                arr1[ii][i] = tmp;
+                            }
+                            }
+                  };
+
+      })
+      let valueMaxObj = {
+
+      };
+      // 对arr进行排序
+      // TODO 获取每个币种最大值
+      let len = arr.length;
+                  for(let i = 0 ; i < len -1 ; i++){
+                          console.log(arr[i]);
+                          let a = Object.assign([],JSON.parse(JSON.stringify(arr[i])));
+                          let s = a[0];
+                          a.shift();
+                          console.log(s);
+                          valueMaxObj[s] = Math.max(...a);
+                            for(let j = i +1; j < len ; j++){
+                            if(Number(arr[j][1]) < Number(arr[i][1])){
+                                let tmp = arr[j];  
+                                arr[j] = arr[i];
+                                arr[i] = tmp;
+                            }
+                            }
+                  };
+
+      console.log(valueMaxObj);
+      // 对arr  按照首项进行排序   对arr1
       date.unshift("product");
-      let serie = names.map(_ => {
-        return { type: "line", smooth: true, seriesLayoutBy: "row" };
-        return {
-                //设置类别
-                seriesLayoutBy: "row" ,
-                type: 'line',
-                //y轴刻度
-                axisLabel: {
-                    //设置y轴数值为%
-                    rotate : 30,
-                    formatter: function(value,index){
-                      console.log(value);
-                      return value;
-                    }  
-                },
-            };
+      let serie = names.map((v,i) => {
+        return { type: "line", stack : "precent",  smooth: true, seriesLayoutBy: "row" ,  
+                            itemStyle : {
+                              normal : {
+                                areaStyle : {},
+                                label : {
+                                  show : true,
+                                  offset : [20,40],
+                                  color : '#fff',
+                                  fontWeight : 'bold',
+                                  formatter : function(item){
+                                    console.log(item.data[item.componentIndex + 1])
+                                    if(valueMaxObj[item.seriesName] >= 1  &&  Number(item.data[item.componentIndex + 1]) == valueMaxObj[item.seriesName] ){
+                                      return item.seriesName
+                                    }else{
+                                      return '';
+                                    }
+                                  }
+                                }
+                              // label: {
+                              //   show: true,
+                              //   position: "top",
+                              //   formatter: function(item){
+                              //     console.log(item);
+                              //     // console.log(Number(item.data[item.dataIndex]).toFixed(2) )
+                              //     return  Number(item.data[item.componentIndex + 1]).toFixed(2) + '%';
+                              //   }
+                              // },
+                              },
+                            } };
       });
-      console.log(arr);
-      console.log(serie);
       var option = {
         legend: {},
         title : {
@@ -133,60 +194,49 @@ export default {
         },
         tooltip: {
           trigger: "axis",
-          showContent: true
+          showContent: false
         },
         dataset: {
           source: [date, ...arr]
-        },
-        xAxis: { type: "category" },
+        }, 
+        xAxis: { type: "category" , boundaryGap : false },
         // yAxis : {gridIndex : 0},
-        yAxis: { gridIndex: 0  , type : 'value', axisLabel: {  
-                            show: true,  
-                            interval: 'auto',  
-                            formatter: '{value} %'
-                            },  
-                        show: true },
+        yAxis: { gridIndex: 0  , type : 'value', 
+                            axisLabel: {  
+                              show: true,  
+                              interval: 'auto',  
+                              formatter: '{value} %'
+                            },
+                            
+                        show: true, max : 100  },
         grid: { top: "55%" },
         series: [
           ...serie,
-          // {
-          //   type: "line",
-          //   smooth: true,
-          //   data: total,
-          //   itemStyle: { color: "black" }
-          // },
           {
             type: "pie",
             id: "pie",
             radius: "30%",
             center: ["50%", "25%"],
             label: {
-              formatter: "{b}: {@[" + 1 + "]} ({d}%)"
+              formatter: "{b}:   {@[" + 1 + "]} ({d}%)"
             },
-            encode: {
-              itemName: "product",
-              value: date[1],
-              tooltip: date[1]
-            }
+            data : arr1[0]
           }
         ]
       };
       let _this = this;
       this.myChart.on("updateAxisPointer", function(event) {
         var xAxisInfo = event.axesInfo[0];
-        console.log(event);
         if (xAxisInfo) {
           var dimension = xAxisInfo.value + 1;
           _this.myChart.setOption({
             series: {
               id: "pie",
               label: {
-                formatter: "{b}: {@[" + dimension + "]} ({d}%)"
+                // formatter: "{b}: {@[" + dimension + "]} ({d}%)"
+                formatter: "{b}:   {@[" + dimension + "]} ({d}%)"
               },
-              encode: {
-                value: dimension,
-                tooltip: dimension
-              }
+              data :  arr1[dimension - 1] 
             }
           });
         }
