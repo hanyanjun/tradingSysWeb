@@ -22,10 +22,10 @@ const fund = {
         endday
       } = payload;
       return new Promise((resolve,reject)=>{
-        // api.gainTotalBalance(payload).then(obj => {
-        //   if(obj.data){
-        //   let arr = Object.assign([], obj.data);
-          let arr = JSON.parse(JSON.stringify(d.data1));
+        api.gainTotalBalance(payload).then(obj => {
+          if(obj.data){
+          let arr = Object.assign([], obj.data);
+          // let arr = JSON.parse(JSON.stringify(d.data1));
           arr = arr.map((v, i) => {
             if (v.endbalance && v.endbalance != '{}') {
               arr[i].endbalance = JSON.parse(arr[i].endbalance);
@@ -48,10 +48,10 @@ const fund = {
                 resolve(obj)
             })
           }
-        //   }else{
-        //       resolve({});
-        //   }
-        // })
+          }else{
+              resolve({});
+          }
+        })
       })
     },
     gainAllFund({

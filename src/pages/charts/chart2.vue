@@ -135,15 +135,8 @@ export default {
 
       };
       // 对arr进行排序
-      // TODO 获取每个币种最大值
       let len = arr.length;
                   for(let i = 0 ; i < len -1 ; i++){
-                          console.log(arr[i]);
-                          let a = Object.assign([],JSON.parse(JSON.stringify(arr[i])));
-                          let s = a[0];
-                          a.shift();
-                          console.log(s);
-                          valueMaxObj[s] = Math.max(...a);
                             for(let j = i +1; j < len ; j++){
                             if(Number(arr[j][1]) < Number(arr[i][1])){
                                 let tmp = arr[j];  
@@ -152,10 +145,15 @@ export default {
                             }
                             }
                   };
-
+      arr.forEach((v,i)=>{
+          let v1 = Object.assign([],v);
+          valueMaxObj[v1.shift()] = Math.max(...v1);
+      })
       console.log(valueMaxObj);
       // 对arr  按照首项进行排序   对arr1
       date.unshift("product");
+
+
       let serie = names.map((v,i) => {
         return { type: "line", stack : "precent",  smooth: true, seriesLayoutBy: "row" ,  
                             itemStyle : {
@@ -163,7 +161,7 @@ export default {
                                 areaStyle : {},
                                 label : {
                                   show : true,
-                                  offset : [20,40],
+                                  offset : [20,30],
                                   color : '#fff',
                                   fontWeight : 'bold',
                                   formatter : function(item){
