@@ -145,15 +145,17 @@ export default {
                             }
                             }
                   };
+      // 记录每个币种的最大值
       arr.forEach((v,i)=>{
           let v1 = Object.assign([],v);
           valueMaxObj[v1.shift()] = Math.max(...v1);
       })
-      console.log(valueMaxObj);
       // 对arr  按照首项进行排序   对arr1
       date.unshift("product");
+      // 保证币种只出现一次
+      let symbolNum = {
 
-
+      };
       let serie = names.map((v,i) => {
         return { type: "line", stack : "precent",  smooth: true, seriesLayoutBy: "row" ,  
                             itemStyle : {
@@ -166,7 +168,8 @@ export default {
                                   fontWeight : 'bold',
                                   formatter : function(item){
                                     console.log(item.data[item.componentIndex + 1])
-                                    if(valueMaxObj[item.seriesName] >= 1  &&  Number(item.data[item.componentIndex + 1]) == valueMaxObj[item.seriesName] ){
+                                    if(valueMaxObj[item.seriesName] >= 1  &&  Number(item.data[item.componentIndex + 1]) == valueMaxObj[item.seriesName] &&  !symbolNum[item.seriesName]){
+                                      symbolNum[item.seriesName] = 1;
                                       return item.seriesName
                                     }else{
                                       return '';
